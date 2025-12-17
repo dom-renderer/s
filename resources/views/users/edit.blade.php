@@ -19,89 +19,122 @@
 		font-size: 15px;
 	}
     .select2.select2-container {
+        margin-bottom: 0;
+    }
+    .content-inbox .select2.select2-container {
         margin-bottom: 20px;
     }
-    .card-body input.form-control {
-        margin-bottom: 30px;
-    }
-    .form-select {
-        margin-bottom: 30px;
-    }
-    .iti.iti--allow-dropdown.iti--show-flags.iti--inline-dropdown {
+    .content-inbox input.form-control {
         margin-bottom: 20px;
     }
-    .card-body {
-        padding-top: .75rem;
-        padding-bottom: 0;
+    .content-inbox .form-select {
+        margin-bottom: 20px;
+    }
+    .content-inbox .iti.iti--allow-dropdown.iti--show-flags.iti--inline-dropdown {
+        margin-bottom: 20px;
     }
 </style>
 @endpush
 
 @section('content')
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">Edit User</div>
-            <div class="card-body">
-                <form id="userForm" method="POST" action="{{ route('users.update', encrypt($user->id)) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <div class="mb-3">
-                        <!-- <label for="name" class="form-label">Name <span class="text-danger">*</span></label> -->
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Name" value="{{ old('name', $user->name) }}" required>
+<div class="welcome-box">
+    <div class="welcome-left">
+        <h1 class="h-30 clr-blue fw-bold">Edit User</h1>
+        <p class="mt-2">Update user details, roles, and permissions</p>
+    </div>
+</div>
+<form id="userForm" method="POST" action="{{ route('users.update', encrypt($user->id)) }}" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
+    <div class="content-box">
+        <div class="head-content">
+            <h3 class="h-16 fw-bold">
+                <img src="{{ asset('ui/images/basic-icon2.svg') }}" alt="">
+                Basic Information
+            </h3>
+        </div>
+        <div class="content-inbox">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Enter name" value="{{ old('name', $user->name) }}" required>
                         @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="mb-3">
-                        <!-- <label for="email" class="form-label">Email <span class="text-danger">*</span></label> -->
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Email" value="{{ old('email', $user->email) }}" required>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter email" value="{{ old('email', $user->email) }}" required>
                         @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="mb-3 row">
-                        <div class="col-12">
-                            <!-- <label for="phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label> -->
-                            <input type="hidden" name="dial_code" id="dial_code">                            
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}" required>
-                            @error('phone_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Phone Number</label>
+                        <input type="hidden" name="dial_code" id="dial_code">
+                        <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}" required>
+                        @error('phone_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="mb-3">
-                        <!-- <label for="profile" class="form-label">Profile Image</label> -->
-                        <input type="file" class="form-control @error('profile') is-invalid @enderror" id="profile" name="profile" placeholder="Profile Image" accept="image/*">
-                        @if($user->profile)
-                            <img src="{{ $user->userprofile }}" alt="Profile" class="img-thumbnail mt-2" width="80">
-                        @endif
-                        @error('profile')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="mb-3">
-                        <!-- <label for="status" class="form-label">Status <span class="text-danger">*</span></label> -->
-                        <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Status</label>
+                        <select class="form-select custom-select-arrow @error('status') is-invalid @enderror" id="status" name="status" required>
                             <option value="1" {{ old('status', $user->status) == '1' ? 'selected' : '' }}>Active</option>
                             <option value="0" {{ old('status', $user->status) == '0' ? 'selected' : '' }}>Inactive</option>
                         </select>
                         @error('status')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="mb-3">
-                        <!-- <label for="password" class="form-label">Password</label> -->
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" id="password" name="password">
-                        @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        <small class="form-text text-muted">Leave blank to keep unchanged.</small>
-                    </div>
-                    <div class="mb-3">
-                        <!-- <label for="roles" class="form-label">Roles <span class="text-danger">*</span></label> -->
-                        <select class="form-select select2 @error('roles') is-invalid @enderror" id="roles" name="roles" required>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Roles</label>
+                        <select class="form-select custom-select-arrow select2 @error('roles') is-invalid @enderror" id="roles" name="roles" required>
+                            <option value="">Select Roles</option>
                             @foreach($roles as $id => $name)
                                 <option value="{{ $id }}" {{ (in_array($id, old('roles', $userRoleIds))) ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                         @error('roles')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <button type="submit" class="btn btn-primary">Update User</button>
-                    <a href="{{ route('users.index') }}" class="btn btn-secondary ms-3">Cancel</a>
-                </form>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter password" id="password" name="password">
+                        @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <small class="form-text text-muted">Leave blank to keep unchanged.</small>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Profile Image</label>
+                        <input type="file" class="form-control @error('profile') is-invalid @enderror" id="profile" name="profile" accept="image/*">
+                        @if($user->profile)
+                            <img src="{{ $user->userprofile }}" alt="Profile" class="img-thumbnail mt-2" width="80">
+                        @endif
+                        @error('profile')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="content-box">   
+        <div class="save-draft">
+            <div class="draaft-left">
+                <a href="{{ route('users.index') }}">
+                    <img src="{{ asset('ui/images/leftarrow-vector.svg') }}" alt="">
+                    <span class="sz-18">Back to Users</span>
+                </a>
+            </div>
+            <div class="draft-rgt">
+                <a href="{{ route('users.index') }}" class="btn btn-gen bg-btn1">Cancel</a>
+                <button type="submit" class="btn btn-gen bg-btn3">Update User</button>
+            </div>
+        </div>
+    </div>
+</form>
 @endsection
 
 @push('css')

@@ -8,10 +8,10 @@
             <p class="mt-2">Manage system users, roles & permissions</p>
         </div>
         <div class="welcome-right">
-            <button class="btn blue-btn d-flex gap-2">
+            <a href="{{ route('users.create') }}" class="btn blue-btn d-flex gap-2">
                 <img src="{{ asset('ui/images/+(1).svg') }}" alt="">
                 Add User
-            </button>
+            </a>
         </div>
     </div>
     <div class="dash-md1">
