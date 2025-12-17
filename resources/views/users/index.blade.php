@@ -20,7 +20,7 @@
                 <div class="status-box flx-manage mb-4">
                     <div class="st-left">
                         <h3 class="h-14 mb-2">Total Users</h3>
-                        <span class="h-20 fw-bold">6</span>
+                        <span class="h-20 fw-bold">{{ $all }}</span>
                     </div>
                     <div class="st-img bg-1">
                         <img src="{{ asset('ui/images/user-top1.svg') }}" alt="">
@@ -31,7 +31,7 @@
                 <div class="status-box flx-manage mb-4">
                     <div class="st-left">
                         <h3 class="h-14 mb-2">Active Users</h3>
-                        <span class="h-20 fw-bold">2</span>
+                        <span class="h-20 fw-bold">{{ $active }}</span>
                     </div>
                     <div class="st-img bg-5">
                         <img src="{{ asset('ui/images/user-top2.svg') }}" alt="">
@@ -42,7 +42,7 @@
                 <div class="status-box flx-manage mb-4">
                     <div class="st-left">
                         <h3 class="h-14 mb-2">Pending Users</h3>
-                        <span class="h-20 fw-bold">0</span>
+                        <span class="h-20 fw-bold"> {{ $pending }} </span>
                     </div>
                     <div class="st-img bg-4">
                         <img src="{{ asset('ui/images/user-top3.svg') }}" alt="">
@@ -53,7 +53,7 @@
                 <div class="status-box flx-manage mb-4">
                     <div class="st-left">
                         <h3 class="h-14 mb-2">Inactive Users</h3>
-                        <span class="h-20 fw-bold">2</span>
+                        <span class="h-20 fw-bold">{{ $inactive }}</span>
                     </div>
                     <div class="st-img bg-6">
                         <img src="{{ asset('ui/images/user-top4.svg') }}" alt="">
@@ -66,22 +66,21 @@
             <div class="flietr-left">
                 <div class="search-filter">
                     <img src="{{ asset('ui/images/search.svg') }}" alt="">
-                    <input type="text" class="form-control form-control-sm" placeholder="Search users...">
+                    <input type="text" id="filter-name" class="form-control form-control-sm" placeholder="Search users...">
                 </div>
                 <div class="custom-select-wrap">
-                    <select class="form-select custom-select-arrow">
-                        <option selected>Roles</option>
-                        <option value="1">Option One</option>
-                        <option value="2">Option Two</option>
-                        <option value="3">Option Three</option>
+                    <select id="filter-role" class="form-select custom-select-arrow">
+                        <option selected value="">Roles</option>
+                        @foreach ($roles as $roleId => $roleName)
+                            <option value="{{ $roleId }}"> {{ ucwords($roleName) }} </option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="custom-select-wrap">
-                    <select class="form-select custom-select-arrow">
-                        <option selected>Status</option>
-                        <option value="1">Option One</option>
-                        <option value="2">Option Two</option>
-                        <option value="3">Option Three</option>
+                    <select id="filter-status" class="form-select custom-select-arrow">
+                        <option selected value="">Status</option>
+                        <option value="1">Active</option>
+                        <option value="2">InActive</option>
                     </select>
                 </div>
             </div>
@@ -136,9 +135,6 @@
                         filter_role: function () {
                             return $('#filter-role').val();
                         },
-                        filter_department: function () {
-                            return $('#filter-department').val();
-                        },
                         filter_name: function () {
                             return $('#filter-name').val();
                         }
@@ -148,8 +144,8 @@
                     { data: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'name' },
                     { data: 'email' },
-                    { data: 'phone_number' },
                     { data: 'roles' },
+                    { data: 'last_login_at' },
                     { data: 'status' },
                     { data: 'action', orderable: false, searchable: false }
                 ],

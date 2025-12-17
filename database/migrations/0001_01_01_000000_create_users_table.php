@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('status')->default(0)->comment('0 = Inactive |  1 = Active');
             $table->boolean('approved')->default(0);
             $table->date('dob')->nullable();
+            $table->dateTime('last_login_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

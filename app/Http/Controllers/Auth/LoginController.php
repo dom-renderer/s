@@ -57,6 +57,11 @@ class LoginController extends Controller
             session()->flush();
             return redirect()->to('login')->with('error', 'Your access to app has been blocked! Please contact the administrator');
         }
+
+        if($user->approved == 0) {
+            session()->flush();
+            return redirect()->to('login')->with('error', 'Your access to app has not been approved yet! Please contact the administrator');
+        }
         
         Auth::login($user);
 
@@ -66,6 +71,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user) 
     {
         if (Auth::check()) {
+            auth()->user()->update(['last_login_at' => now()]);
             return redirect()->route('dashboard');
         }
         

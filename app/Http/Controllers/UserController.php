@@ -36,7 +36,14 @@ class UserController extends Controller
         $title = $this->title;
         $subTitle = 'Manage users here';
 
-        return view($this->view . 'index', compact('title', 'subTitle'));
+        $roles = Role::whereNotIn('name', self::$excludeRoles)->pluck('name', 'id');
+
+        $all = User::count();
+        $active = User::active()->count();
+        $inactive = User::inactive()->count();
+        $pending = User::pending()->count();
+
+        return view($this->view . 'index', compact('title', 'subTitle', 'roles', 'all', 'active', 'inactive', 'pending'));
     }
 
     /**
@@ -58,10 +65,6 @@ class UserController extends Controller
             $query->whereHas('roles', fn ($builder) => $builder->whereIn('id', explode(',', request('filter_role'))));
         }
 
-        if (request()->filled('filter_department')) {
-            $query->whereHas('department', fn ($builder) => $builder->whereIn('department_id', explode(',', request('filter_department'))));
-        }
-
         if (request()->filled('filter_name')) {
             $query->where(function ($builder) {
                 $filter = request('filter_name');
@@ -79,6 +82,12 @@ class UserController extends Controller
 
         return datatables()
         ->eloquent($query)
+        ->editColumn('name', function ($row) {
+            return '<img src="' . $row->userprofile . '" style="height:48px;" /> &nbsp;&nbsp;' . $row->name;
+        })
+        ->editColumn('last_login_at', function ($row) {
+            return $row->last_login_at ? $row->last_login_at->diffForHumans() : 'Not logged in yet';
+        })
         ->editColumn('phone_number', function ($row) {
             return '+' . $row->dial_code . ' ' . $row->phone_number;
         })
@@ -102,22 +111,22 @@ class UserController extends Controller
             $html = '';
 
             if (auth()->user()->can('users.edit')) {
-                $html .= '<a href="' . route('users.edit', encrypt($row->id)) . '" class="btn btn-sm btn-primary"> <i class="fa fa-edit"> </i> </a>&nbsp;';
+                $html .= '<li><a href="' . route('users.edit', encrypt($row->id)) . '"><img src="' . asset('ui/images/td-edit.svg') . '" alt=""></a></li>';
             }
 
             if (auth()->user()->can('users.destroy')) {
                 if ($row->id != auth()->user()->id) {
-                    $html .= '<button type="button" class="btn btn-sm btn-danger" id="deleteRow" data-row-route="' . route('users.destroy', $row->id) . '"> <i class="fa fa-trash"> </i> </button>&nbsp;';
+                    $html .= '<li><button style="border:none;" id="deleteRow" data-row-route="' . route('users.destroy', $row->id) . '" href=""><img src="' . asset('ui/images/td-delete.svg') . '" alt=""></button></li>';
                 }
             }
 
             if (auth()->user()->can('users.show')) {
-                $html .= '<a href="' . route('users.show', encrypt($row->id)) . '" class="btn btn-sm btn-secondary"> <i class="fa fa-eye"> </i> </a>';
+                $html .= '<li><a href="' . route('users.show', encrypt($row->id)) . '"><img src="' . asset('ui/images/td-setting.svg') . '" alt=""></a></li>';
             }
 
             return $html;
         })
-        ->rawColumns(['status', 'roles', 'action'])
+        ->rawColumns(['status', 'roles', 'action', 'name'])
         ->addIndexColumn()
         ->toJson();
     }

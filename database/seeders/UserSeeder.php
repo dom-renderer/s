@@ -22,7 +22,8 @@ class UserSeeder extends Seeder
                     'status' => 1,
                     'phone_number' => 9999999999,
                     'password' => 12345678,
-                    'added_by' => 1
+                    'added_by' => 1,
+                    'approved' => 1
                 ]
             ],
             [
@@ -34,7 +35,8 @@ class UserSeeder extends Seeder
                     'status' => 1,
                     'phone_number' => 246123456,
                     'password' => 12345678,
-                    'added_by' => 1
+                    'added_by' => 1,
+                    'approved' => 1
                 ]
             ],
             [
@@ -46,7 +48,8 @@ class UserSeeder extends Seeder
                     'status' => 1,
                     'phone_number' => 246649784,
                     'password' => 12345678,
-                    'added_by' => 1
+                    'added_by' => 1,
+                    'approved' => 1
                 ]
             ],
             [
@@ -58,7 +61,8 @@ class UserSeeder extends Seeder
                     'status' => 1,
                     'phone_number' => 2469876547,
                     'password' => 12345678,
-                    'added_by' => 1
+                    'added_by' => 1,
+                    'approved' => 1
                 ]
             ]
         ];

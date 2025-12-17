@@ -43,13 +43,29 @@ class User extends Authenticatable implements OAuthenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
     public function scopeActive($query)
     {
-        return $query->where( 'status', '1' );
+        return $query->where( 'status', 1 );
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where( 'status', 0 );
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where( 'approved', 0 );
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where( 'approved', 1 );
     }
 
     public function setPasswordAttribute($value)
@@ -79,48 +95,5 @@ class User extends Authenticatable implements OAuthenticatable
     
     public function cityr () {
         return $this->belongsTo(City::class, 'city');
-    }
-
-    public function department() {
-        return $this->hasMany(DepartmentUser::class, 'user_id');
-    }
-
-    public function expertise() {
-        return $this->hasMany(ExpertiseUser::class, 'user_id');
-    }
-
-    public function addedRequisitions()
-    {
-        return $this->hasMany(Requisition::class, 'added_by');
-    }
-
-    public function approvedRequisitions()
-    {
-        return $this->hasMany(Requisition::class, 'approved_by');
-    }
-
-    public function rejectedRequisitions()
-    {
-        return $this->hasMany(Requisition::class, 'rejected_by');
-    }
-
-    public function inspectionLogs()
-    {
-        return $this->hasMany(JobInspectedLog::class, 'inspected_by');
-    }
-
-    public function jobs()
-    {
-        return $this->belongsToMany( Job::class, 'job_technicians', 'technician_id', 'job_id' );
-    }
-
-    public function deviceTokens()
-    {
-        return $this->hasMany( DeviceToken::class, 'user_id' );
-    }
-
-    public function locations()
-    {
-        return $this->hasMany(Location::class, 'customer_id');
     }
 }
