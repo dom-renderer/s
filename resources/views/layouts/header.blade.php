@@ -28,12 +28,13 @@
             <!-- Center Navigation -->
             <nav class="header-nav">
                 <ul class="nav">
-                    <li><a href="{{ route('dashboard') }}" class="nav-link active">Dashboard</a></li>
+                    <li><a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a></li>
                     <li><a href="#" class="nav-link">OTAs</a></li>
                     <li><a href="#" class="nav-link">Vehicles</a></li>
-                    <li><a href="{{ route('users.index') }}" class="nav-link">Users</a></li>
-                    <li><a href="{{ route('roles.index') }}" class="nav-link">Roles</a></li>
-                    <li><a href="{{ route('settings.index') }}" class="nav-link">Settings</a></li>
+                    <li><a href="{{ route('vehicle-classes.index') }}" class="nav-link {{ request()->routeIs('vehicle-classes.*') ? 'active' : '' }}">Vehicle Classes</a></li>
+                    <li><a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">Users</a></li>
+                    <li><a href="{{ route('roles.index') }}" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">Roles</a></li>
+                    <li><a href="{{ route('settings.index') }}" class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">Settings</a></li>
                 </ul>
             </nav>
 
