@@ -1,0 +1,147 @@
+@extends('layouts.app', ['title' => $title, 'subTitle' => $subTitle])
+
+@push('css')
+<style>
+    label.error {
+        color: red;
+    }
+    .content-inbox input.form-control {
+        margin-bottom: 20px;
+    }
+    .content-inbox .form-select {
+        margin-bottom: 20px;
+    }
+    .content-inbox textarea.form-control {
+        margin-bottom: 20px;
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="welcome-box">
+    <div class="welcome-left">
+        <h1 class="h-30 clr-blue fw-bold">Add New Vehicle Transmission</h1>
+        <p class="mt-2">Configure vehicle transmission details and status</p>
+    </div>
+</div>
+<form id="vehicleTransmissionForm" method="POST" action="{{ route('vehicle-transmissions.store') }}">
+    @csrf
+    <div class="content-box">
+        <div class="head-content">
+            <h3 class="h-16 fw-bold">
+                <img src="{{ asset('ui/images/basic-icon2.svg') }}" alt="">
+                Basic Information
+            </h3>
+        </div>
+        <div class="content-inbox">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" placeholder="Enter vehicle transmission title" required>
+                        @error('title')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label">Status <span class="text-danger">*</span></label>
+                        <select class="form-select custom-select-arrow @error('status') is-invalid @enderror" id="status" name="status" required>
+                            <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>Active</option>
+                            <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                        @error('status')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="mb-4">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" placeholder="Enter vehicle transmission description">{{ old('description') }}</textarea>
+                        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-box">   
+        <div class="save-draft">
+            <div class="draaft-left">
+                <a href="{{ route('vehicle-transmissions.index') }}">
+                    <img src="{{ asset('ui/images/leftarrow-vector.svg') }}" alt="">
+                    <span class="sz-18">Back to Vehicle Transmissions</span>
+                </a>
+            </div>
+            <div class="draft-rgt">
+                <a href="{{ route('vehicle-transmissions.index') }}" class="btn btn-gen bg-btn1">Cancel</a>
+                <button type="submit" class="btn btn-gen bg-btn3">Create Vehicle Transmission</button>
+            </div>
+        </div>
+    </div>
+</form>
+@endsection
+
+@push('js')
+<script src="{{ asset('assets/js/jquery-validate.min.js') }}"></script>
+<script>
+$(document).ready(function() {
+    $('#vehicleTransmissionForm').validate({
+        rules: {
+            title: { 
+                required: true,
+                maxlength: 255
+            },
+            description: {
+                maxlength: 1000
+            },
+            status: { 
+                required: true 
+            }
+        },
+        messages: {
+            title: {
+                required: "The title field is required.",
+                maxlength: "Title cannot exceed 255 characters."
+            },
+            description: {
+                maxlength: "Description cannot exceed 1000 characters."
+            },
+            status: {
+                required: "The status field is required."
+            }
+        },
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent());
+        },
+        submitHandler: function (form) {
+            $('body').find('.LoaderSec').removeClass('d-none');
+            form.submit();
+        }
+    });
+
+    // Check for duplicate title on blur
+    $('#title').on('blur', function() {
+        let title = $(this).val();
+        if (title) {
+            $.ajax({
+                url: "{{ route('vehicle-transmissions.check-duplicate') }}",
+                type: "POST",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    title: title,
+                    id: null
+                },
+                success: function(response) {
+                    if (response.exists) {
+                        $('#title').addClass('is-invalid');
+                        $('#title').after('<div class="invalid-feedback">This vehicle transmission title already exists.</div>');
+                    } else {
+                        $('#title').removeClass('is-invalid');
+                        $('#title').next('.invalid-feedback').remove();
+                    }
+                }
+            });
+        }
+    });
+});
+</script>
+@endpush
+

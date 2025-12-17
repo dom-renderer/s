@@ -11,6 +11,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
     Route::resource('vehicle-classes', \App\Http\Controllers\VehicleClassController::class);
     Route::post('vehicle-classes/check-duplicate', [\App\Http\Controllers\VehicleClassController::class, 'checkDuplicate'])->name('vehicle-classes.check-duplicate');
+    Route::resource('vehicle-transmissions', \App\Http\Controllers\VehicleTransmissionController::class);
+    Route::post('vehicle-transmissions/check-duplicate', [\App\Http\Controllers\VehicleTransmissionController::class, 'checkDuplicate'])->name('vehicle-transmissions.check-duplicate');
+    Route::resource('vehicle-types', \App\Http\Controllers\VehicleTypeController::class);
+    Route::post('vehicle-types/check-duplicate', [\App\Http\Controllers\VehicleTypeController::class, 'checkDuplicate'])->name('vehicle-types.check-duplicate');
 
     Route::get('settings', [App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');

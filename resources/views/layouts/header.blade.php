@@ -32,6 +32,8 @@
                     <li><a href="#" class="nav-link">OTAs</a></li>
                     <li><a href="#" class="nav-link">Vehicles</a></li>
                     <li><a href="{{ route('vehicle-classes.index') }}" class="nav-link {{ request()->routeIs('vehicle-classes.*') ? 'active' : '' }}">Vehicle Classes</a></li>
+                    <li><a href="{{ route('vehicle-transmissions.index') }}" class="nav-link {{ request()->routeIs('vehicle-transmissions.*') ? 'active' : '' }}">Vehicle Transmissions</a></li>
+                    <li><a href="{{ route('vehicle-types.index') }}" class="nav-link {{ request()->routeIs('vehicle-types.*') ? 'active' : '' }}">Vehicle Types</a></li>
                     <li><a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">Users</a></li>
                     <li><a href="{{ route('roles.index') }}" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">Roles</a></li>
                     <li><a href="{{ route('settings.index') }}" class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">Settings</a></li>
