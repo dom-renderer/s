@@ -30,7 +30,7 @@
                 <ul class="nav">
                     <li><a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a></li>
                     <li><a href="#" class="nav-link">OTAs</a></li>
-                    <li><a href="#" class="nav-link">Vehicles</a></li>
+                    <li><a href="{{ route('vehicles.index') }}" class="nav-link {{ request()->routeIs('vehicles.*') ? 'active' : '' }}">Vehicles</a></li>
                     <li><a href="{{ route('vehicle-classes.index') }}" class="nav-link {{ request()->routeIs('vehicle-classes.*') ? 'active' : '' }}">Vehicle Classes</a></li>
                     <li><a href="{{ route('vehicle-transmissions.index') }}" class="nav-link {{ request()->routeIs('vehicle-transmissions.*') ? 'active' : '' }}">Vehicle Transmissions</a></li>
                     <li><a href="{{ route('vehicle-types.index') }}" class="nav-link {{ request()->routeIs('vehicle-types.*') ? 'active' : '' }}">Vehicle Types</a></li>
