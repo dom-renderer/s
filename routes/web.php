@@ -15,6 +15,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('vehicle-transmissions/check-duplicate', [\App\Http\Controllers\VehicleTransmissionController::class, 'checkDuplicate'])->name('vehicle-transmissions.check-duplicate');
     Route::resource('vehicle-types', \App\Http\Controllers\VehicleTypeController::class);
     Route::post('vehicle-types/check-duplicate', [\App\Http\Controllers\VehicleTypeController::class, 'checkDuplicate'])->name('vehicle-types.check-duplicate');
+    Route::resource('locations', \App\Http\Controllers\LocationController::class);
+    Route::post('locations/check-duplicate', [\App\Http\Controllers\LocationController::class, 'checkDuplicate'])->name('locations.check-duplicate');
+    Route::post('locations/get-parishes', [\App\Http\Controllers\LocationController::class, 'getParishes'])->name('locations.get-parishes');
 
     Route::get('settings', [App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');

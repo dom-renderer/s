@@ -63,6 +63,10 @@ class PermissionSeeder extends Seeder
             [
                 'title' => 'Vehicle Types',
                 'name' => 'vehicle-types'
+            ],
+            [
+                'title' => 'Locations',
+                'name' => 'locations'
             ]
         ];
 
