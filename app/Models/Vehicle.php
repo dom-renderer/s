@@ -16,6 +16,7 @@ class Vehicle extends Model
         'base_cost_per_day' => 'decimal:2',
         'vat_percentage' => 'decimal:2',
         'images' => 'array',
+        'alternate_pickup_location' => 'array',
         'year' => 'integer',
         'seats' => 'integer',
         'doors' => 'integer',
@@ -35,6 +36,11 @@ class Vehicle extends Model
     public function primaryPickupLocation()
     {
         return $this->belongsTo(Location::class, 'primary_pickup_location_id');
+    }
+
+    public function alternatePickupLocations()
+    {
+        return $this->belongsToMany(Location::class, 'vehicle_alternate_locations', 'vehicle_id', 'location_id');
     }
 
     public function scopeActive($query)

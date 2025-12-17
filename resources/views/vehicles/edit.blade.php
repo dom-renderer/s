@@ -75,6 +75,15 @@
         justify-content: center;
         color: #999;
     }
+    .image-preview-item.sortable-ghost {
+        opacity: 0.4;
+    }
+    .image-preview-item.sortable-drag {
+        cursor: move;
+    }
+    .image-preview-container.sortable-drag {
+        cursor: move;
+    }
 </style>
 @endpush
 
@@ -360,6 +369,7 @@
 
 @push('js')
 <script src="{{ asset('assets/js/jquery-validate.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 <script>
 $(document).ready(function() {
     // Initialize Select2 for dropdowns
@@ -369,6 +379,14 @@ $(document).ready(function() {
         },
         allowClear: true,
         width: '100%'
+    });
+
+    // Initialize Select2 for alternate pickup locations (multi-select)
+    $('#alternate_pickup_location').select2({
+        placeholder: 'Select Alternate Locations',
+        allowClear: true,
+        width: '100%',
+        multiple: true
     });
 
     // Allow typing new values for make and fuel_type
@@ -509,9 +527,59 @@ $(document).ready(function() {
                     </div>
                 `);
             }
+            
+            // Reinitialize sortable after adding new image
+            initImageSortable();
         };
         reader.readAsDataURL(file);
     }
+
+    // Initialize Sortable for image reordering
+    function initImageSortable() {
+        const container = document.getElementById('imagePreviewContainer');
+        if (container && typeof Sortable !== 'undefined') {
+            // Destroy existing sortable instance if any
+            if (container.sortableInstance) {
+                container.sortableInstance.destroy();
+            }
+            
+            container.sortableInstance = new Sortable(container, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                dragClass: 'sortable-drag',
+                handle: 'img',
+                filter: '.empty',
+                onEnd: function(evt) {
+                    // Update imageFiles array order based on new DOM order
+                    const newOrder = [];
+                    $('#imagePreviewContainer .image-preview-item:not(.empty)').each(function() {
+                        const index = $(this).find('.remove-image').data('index');
+                        if (index !== undefined && imageFiles[index]) {
+                            newOrder.push(imageFiles[index]);
+                        }
+                    });
+                    imageFiles = newOrder;
+                    
+                    // Update existing images order
+                    const existingOrder = [];
+                    $('#imagePreviewContainer .image-preview-item:not(.empty)').each(function() {
+                        const imagePath = $(this).find('.remove-image').data('image-path');
+                        if (imagePath) {
+                            existingOrder.push(imagePath);
+                        }
+                    });
+                    existingImages = existingOrder;
+                    
+                    updatePreviewIndexes();
+                }
+            });
+        }
+    }
+
+    // Initialize sortable on page load (after a short delay to ensure DOM is ready)
+    setTimeout(function() {
+        initImageSortable();
+    }, 100);
 
     $(document).on('click', '.remove-image', function(e) {
         e.preventDefault();
@@ -564,10 +632,54 @@ $(document).ready(function() {
         }
     }
 
+    function updateFileInputWithOrder() {
+        // Update file input with files in the current DOM order
+        try {
+            if (imageFiles.length > 0 && typeof DataTransfer !== 'undefined') {
+                const dt = new DataTransfer();
+                const orderedFiles = [];
+                
+                // Get files in DOM order
+                $('#imagePreviewContainer .image-preview-item:not(.empty)').each(function() {
+                    const index = $(this).find('.remove-image').data('index');
+                    if (index !== undefined && imageFiles[index]) {
+                        orderedFiles.push(imageFiles[index]);
+                    }
+                });
+                
+                // Add any remaining files that might not be in preview
+                imageFiles.forEach((file, idx) => {
+                    if (!orderedFiles.includes(file)) {
+                        orderedFiles.push(file);
+                    }
+                });
+                
+                orderedFiles.forEach(file => {
+                    try {
+                        dt.items.add(file);
+                    } catch(e) {
+                        console.warn('Could not add file to DataTransfer:', e);
+                    }
+                });
+                
+                const fileInput = document.getElementById('images');
+                if (fileInput && dt.files) {
+                    fileInput.files = dt.files;
+                }
+                
+                // Update imageFiles array to match order
+                imageFiles = orderedFiles;
+            }
+        } catch(e) {
+            console.warn('File input update not supported:', e);
+        }
+    }
+
     function updatePreviewIndexes() {
-        $('.remove-image').each(function(index) {
-            if ($(this).data('index') !== undefined) {
-                $(this).data('index', index);
+        $('#imagePreviewContainer .image-preview-item:not(.empty)').each(function(index) {
+            const removeBtn = $(this).find('.remove-image');
+            if (removeBtn.data('index') !== undefined) {
+                removeBtn.data('index', index);
             }
         });
     }
@@ -665,6 +777,28 @@ $(document).ready(function() {
                 $('#fuel_type').append(`<option value="${$('#fuel_type_new').val()}" selected>${$('#fuel_type_new').val()}</option>`);
                 $('#fuel_type').val($('#fuel_type_new').val()).trigger('change');
             }
+
+            // Update existing images order based on DOM order
+            const orderedExistingImages = [];
+            $('#imagePreviewContainer .image-preview-item:not(.empty)').each(function() {
+                const imagePath = $(this).find('input[name="existing_images[]"]').val();
+                if (imagePath) {
+                    orderedExistingImages.push(imagePath);
+                    $(this).find('input[name="existing_images[]"]').remove();
+                }
+            });
+            
+            // Re-add existing images inputs in new order
+            orderedExistingImages.forEach(imagePath => {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'existing_images[]',
+                    value: imagePath
+                }).appendTo('#vehicleForm');
+            });
+
+            // Ensure image order is preserved - update file input with reordered files
+            updateFileInputWithOrder();
 
             $('body').find('.LoaderSec').removeClass('d-none');
             form.submit();

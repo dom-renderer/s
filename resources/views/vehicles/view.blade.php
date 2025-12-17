@@ -164,7 +164,15 @@ use Illuminate\Support\Facades\Storage;
             <div class="col-lg-6 col-md-6">
                 <div class="mb-4">
                     <label class="form-label">Alternate Pickup Location</label>
-                    <h4 class="h-16 fw-bold">{{ $vehicle->alternate_pickup_location ?: 'N/A' }}</h4>
+                    @if(isset($alternateLocations) && $alternateLocations->count() > 0)
+                        <div>
+                            @foreach($alternateLocations as $location)
+                                <span class="badge badge-c2 me-2 mb-2">{{ $location->title }}</span>
+                            @endforeach
+                        </div>
+                    @else
+                        <h4 class="h-16 fw-bold">N/A</h4>
+                    @endif
                 </div>
             </div>
         </div>

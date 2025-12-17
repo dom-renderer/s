@@ -147,7 +147,8 @@ class VehicleController extends Controller
             'vat_percentage' => 'required|numeric|min:0|max:100',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'primary_pickup_location_id' => 'nullable|exists:locations,id',
-            'alternate_pickup_location' => 'nullable|string|max:255',
+            'alternate_pickup_location' => 'nullable|array',
+            'alternate_pickup_location.*' => 'exists:locations,id',
         ], [
             'vehicle_name.required' => 'The vehicle name field is required.',
             'model.required' => 'The model field is required.',
@@ -189,6 +190,13 @@ class VehicleController extends Controller
             // Handle fuel_type (use fuel_type_new if fuel_type is empty)
             $fuelType = $request->fuel_type ?: $request->fuel_type_new;
 
+            // Handle alternate pickup locations - convert to array of IDs
+            $alternateLocations = null;
+            if ($request->has('alternate_pickup_location') && is_array($request->alternate_pickup_location)) {
+                $alternateLocations = array_filter($request->alternate_pickup_location);
+                $alternateLocations = !empty($alternateLocations) ? array_values($alternateLocations) : null;
+            }
+
             Vehicle::create([
                 'vehicle_name' => $request->vehicle_name,
                 'make' => $make,
@@ -196,7 +204,7 @@ class VehicleController extends Controller
                 'year' => $request->year,
                 'vehicle_class_id' => $request->vehicle_class_id,
                 'transmission_id' => $request->transmission_id,
-                'fuel_type' => $request->fuel_type,
+                'fuel_type' => $fuelType,
                 'seats' => $request->seats,
                 'doors' => $request->doors,
                 'passengers' => $request->passengers,
@@ -206,7 +214,7 @@ class VehicleController extends Controller
                 'vat_percentage' => $request->vat_percentage,
                 'images' => !empty($images) ? $images : null,
                 'primary_pickup_location_id' => $request->primary_pickup_location_id,
-                'alternate_pickup_location' => $request->alternate_pickup_location,
+                'alternate_pickup_location' => $alternateLocations,
                 'status' => $request->status ?? 1,
             ]);
 
@@ -226,8 +234,14 @@ class VehicleController extends Controller
         $vehicle = Vehicle::with(['vehicleClass', 'transmission', 'primaryPickupLocation'])->findOrFail(decrypt($id));
         $title = $this->title;
         $subTitle = 'View Vehicle';
+        
+        // Get alternate locations if they exist
+        $alternateLocations = [];
+        if ($vehicle->alternate_pickup_location) {
+            $alternateLocations = Location::whereIn('id', $vehicle->alternate_pickup_location)->get();
+        }
 
-        return view($this->view . 'view', compact('title', 'subTitle', 'vehicle'));
+        return view($this->view . 'view', compact('title', 'subTitle', 'vehicle', 'alternateLocations'));
     }
 
     /**
@@ -278,7 +292,8 @@ class VehicleController extends Controller
             'vat_percentage' => 'required|numeric|min:0|max:100',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'primary_pickup_location_id' => 'nullable|exists:locations,id',
-            'alternate_pickup_location' => 'nullable|string|max:255',
+            'alternate_pickup_location' => 'nullable|array',
+            'alternate_pickup_location.*' => 'exists:locations,id',
         ], [
             'vehicle_name.required' => 'The vehicle name field is required.',
             'model.required' => 'The model field is required.',
@@ -335,6 +350,23 @@ class VehicleController extends Controller
             // Handle fuel_type (use fuel_type_new if fuel_type is empty)
             $fuelType = $request->fuel_type ?: $request->fuel_type_new;
 
+            // Handle alternate pickup locations - convert to array of IDs
+            $alternateLocations = null;
+            if ($request->has('alternate_pickup_location') && is_array($request->alternate_pickup_location)) {
+                $alternateLocations = array_filter($request->alternate_pickup_location);
+                $alternateLocations = !empty($alternateLocations) ? array_values($alternateLocations) : null;
+            }
+
+            // Handle existing images order from form
+            $orderedImages = [];
+            if ($request->has('existing_images') && is_array($request->existing_images)) {
+                $orderedImages = $request->existing_images;
+            }
+            // Add new images at the end
+            if (!empty($images)) {
+                $orderedImages = array_merge($orderedImages, $images);
+            }
+
             $vehicle->update([
                 'vehicle_name' => $request->vehicle_name,
                 'make' => $make,
@@ -350,9 +382,9 @@ class VehicleController extends Controller
                 'other' => $request->other,
                 'base_cost_per_day' => $request->base_cost_per_day,
                 'vat_percentage' => $request->vat_percentage,
-                'images' => !empty($images) ? $images : null,
+                'images' => !empty($orderedImages) ? $orderedImages : null,
                 'primary_pickup_location_id' => $request->primary_pickup_location_id,
-                'alternate_pickup_location' => $request->alternate_pickup_location,
+                'alternate_pickup_location' => $alternateLocations,
                 'status' => $request->status ?? 1,
             ]);
 
