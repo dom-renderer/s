@@ -279,6 +279,13 @@
                 <div class="image-preview-item empty"></div>
                 <div class="image-preview-item empty"></div>
                 <div class="image-preview-item empty"></div>
+                <div class="image-preview-item empty"></div>
+                <div class="image-preview-item empty"></div>
+                <div class="image-preview-item empty"></div>
+                <div class="image-preview-item empty"></div>
+                <div class="image-preview-item empty"></div>
+                <div class="image-preview-item empty"></div>
+                <div class="image-preview-item empty"></div>
             </div>
         </div>
     </div>
@@ -397,7 +404,7 @@ $(document).ready(function() {
 
     // Image upload handling
     let imageFiles = [];
-    const maxImages = 3;
+    const maxImages = 10;
 
     // Handle browse button click
     $('#browseFilesBtn').on('click', function(e) {

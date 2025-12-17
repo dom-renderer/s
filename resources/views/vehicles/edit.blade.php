@@ -285,10 +285,17 @@
                             <input type="hidden" name="existing_images[]" value="{{ $image }}">
                         </div>
                     @endforeach
-                    @for($i = count($vehicle->images); $i < 3; $i++)
+                    @for($i = count($vehicle->images); $i < 10; $i++)
                         <div class="image-preview-item empty"></div>
                     @endfor
                 @else
+                    <div class="image-preview-item empty"></div>
+                    <div class="image-preview-item empty"></div>
+                    <div class="image-preview-item empty"></div>
+                    <div class="image-preview-item empty"></div>
+                    <div class="image-preview-item empty"></div>
+                    <div class="image-preview-item empty"></div>
+                    <div class="image-preview-item empty"></div>
                     <div class="image-preview-item empty"></div>
                     <div class="image-preview-item empty"></div>
                     <div class="image-preview-item empty"></div>
@@ -411,7 +418,7 @@ $(document).ready(function() {
 
     // Image upload handling
     let imageFiles = [];
-    const maxImages = 3;
+    const maxImages = 10;
     let existingImages = [];
 
     // Store existing images
