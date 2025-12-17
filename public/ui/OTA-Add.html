@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental-OTA-ADD</title>
+    <link rel="stylesheet" href="css/boostrap-min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.6/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+</head>
+
+<body>
+    <!-- header content Start-------------------------------------------->
+    <header class="main-header d-none d-md-block">
+        <div class="container main-container">
+            <div class="header-inner d-flex align-items-center justify-content-between">
+                <!-- Left Logo -->
+                <div class="header-left d-flex align-items-center">
+                    <img src="images/dashboard-logo.svg" class="header-logo" alt="Logo">
+                </div>
+                <!-- Center Navigation -->
+                <nav class="header-nav">
+                    <ul class="nav">
+                        <li><a href="#" class="nav-link">Dashboard</a></li>
+                        <li><a href="#" class="nav-link active">OTAs</a></li>
+                        <li><a href="#" class="nav-link ">Vehicles</a></li>
+                        <li><a href="#" class="nav-link">Pricing</a></li>
+                        <li><a href="#" class="nav-link">Logs</a></li>
+                        <li><a href="#" class="nav-link ">Users</a></li>
+                        <li><a href="#" class="nav-link">Settings</a></li>
+                    </ul>
+                </nav>
+                <div class="header-right d-flex align-items-center">
+                    <div class="notification position-relative me-3">
+                        <img src="images/notification-soute.svg" width="20">
+                        <span class="noti-badge">10</span>
+                    </div>
+                    <div class="user-area d-flex align-items-center">
+                        <div class="text-end">
+                            <div class="name-user">Admin David</div>
+                            <div class="small text-muted">Administrator</div>
+                        </div>
+                        <div class="user-select-wrapper">
+                            <select class="form-select user-select">
+                                <option selected></option>
+                                <option value="3">Logout</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- main hero content End---------------------------------------------->
+    <section class="main hero">
+        <div class="container main-container">
+            <div class="welcome-box wm-respponsive">
+                <div class="welcome-left">
+                    <h1 class="h-30 clr-blue fw-bold">Add New OTA</h1>
+                    <p class="mt-2">Configure a new OTA integration with connection settings and mapping tables</p>
+                </div>
+                <div class="welcome-right">
+                    <button class="btn top-white">Cancel</button>
+                    <button class="btn top-btn"> <img src="images/draft-soute.svg" alt=""> Export</button>
+                    <button class="btn blue-btn d-flex gap-2">
+                        <img src="images/correct-inc.svg" alt="">
+                        Save & Activate
+                    </button>
+                </div>
+            </div>
+            <form action="">
+                <div class="content-box">
+                    <div class="head-content">
+                        <h3 class="h-16 fw-bold">
+                            Basic Information
+                        </h3>
+                        <span>Essential OTA connection settings</span>
+                    </div>
+                    <div class="content-inbox">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label">OTA Name</label>
+                                    <input type="text" class="form-control" placeholder="e.g., Car Trawler">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label">Environment</label>
+                                    <div class="d-flex gap-4 mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="fullRowRadio" checked>
+                                            <label class="form-check-label ms-2">Sandbox</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="fullRowRadio">
+                                            <label class="form-check-label ms-2">Production</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12">
+                                <div class="mb-4">
+                                    <label class="form-label">OTA Name</label>
+                                    <input type="text" class="form-control" placeholder="API URL (auto generated)">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label">Rate Limit (requests/min)</label>
+                                    <input type="text" class="form-control" placeholder="60">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label">Timezone</label>
+                                    <select class="form-select custom-select-arrow">
+                                        <option selected="">UTC</option>
+                                        <option value="1">Option One</option>
+                                        <option value="2">Option Two</option>
+                                        <option value="3">Option Three</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="content-box">
+                    <div class="head-content">
+                        <h3 class="h-16 fw-bold">
+                            Mapping Tables
+                        </h3>
+                        <span>Configure data mapping between your system and OTA</span>
+                    </div>
+
+                    <div class="content-inbox p-0">
+                        <div class="grop-main">
+                            <div class="grop-top">
+                                <h3 class="h-16 fw-bold">
+                                    Vehicle Groups
+                                </h3>
+                                <div class="grop-btns">
+                                    <button class="btn blue-btn d-flex gap-2">
+                                        <img src="images/+(1).svg" alt="">
+                                        Add Mapping
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mapping-box mt-4">
+                                <table class="table table-borderless table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>OTA Name</th>
+                                            <th>OTA Name</th>
+                                            <th>OTA Name</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECON">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECONOMY">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="Economy Cars">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-2">
+                                                    <a href=""><img src="images/td-delete.svg" alt=""></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECON">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECONOMY">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="Economy Cars">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-2">
+                                                    <a href=""><img src="images/td-delete.svg" alt=""></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="grop-main">
+                            <div class="grop-top">
+                                <h3 class="h-16 fw-bold">
+                                    Zones
+                                </h3>
+                                <div class="grop-btns">
+                                    <button class="btn blue-btn d-flex gap-2">
+                                        <img src="images/+(1).svg" alt="">
+                                        Add Mapping
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mapping-box mt-4">
+                                <table class="table table-borderless table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Internal Code</th>
+                                            <th>OTA Code</th>
+                                            <th>Zone Name</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECON">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECONOMY">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="Economy Cars">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-2">
+                                                    <a href=""><img src="images/td-delete.svg" alt=""></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECON">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECONOMY">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="Economy Cars">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-2">
+                                                    <a href=""><img src="images/td-delete.svg" alt=""></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                         <div class="grop-main">
+                            <div class="grop-top">
+                                <h3 class="h-16 fw-bold">
+                                    Rate Codes
+                                </h3>
+                                <div class="grop-btns">
+                                    <button class="btn blue-btn d-flex gap-2">
+                                        <img src="images/+(1).svg" alt="">
+                                        Add Mapping
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mapping-box mt-4">
+                                <table class="table table-borderless table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>OTA Name</th>
+                                            <th>OTA Name</th>
+                                            <th>OTA Name</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECON">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECONOMY">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="Economy Cars">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-2">
+                                                    <a href=""><img src="images/td-delete.svg" alt=""></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECON">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="ECONOMY">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-1">
+                                                    <input type="text" class="form-control" placeholder="Economy Cars">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mb-2 mt-2">
+                                                    <a href=""><img src="images/td-delete.svg" alt=""></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!-- Main hero content End---------------------------------------------->
+
+
+    <script src="js/Jquery-min.js"></script>
+    <script src="js/bootstrap-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+
+
+</body>
+
+</html>

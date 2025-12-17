@@ -1,0 +1,113 @@
+@media screen and (min-width: 992px) and (max-width: 1300px) { 
+
+	
+
+    
+}
+
+@media screen and (min-width: 992px) and (max-width: 1500px) { 
+    .login-card {
+        width: 100%;
+        max-width: 460px;
+        background: transparent;
+        border-radius: 8px;
+        left: 0;
+        position: relative;
+        padding-left: 30px;
+    }
+    .brand-wrap {
+        margin-left: 20px;
+        padding-left: 100px;
+    }
+}
+
+@media screen and (min-width: 767px) and (max-width: 1130px) {
+        .main-header.d-none.d-md-block {
+            position: relative;
+            padding-bottom: 90px;
+        }
+        .header-nav {
+        position: absolute;
+        width: 100%;
+        top: 92px;
+        right: 0;
+        text-align: center;
+    }
+    .header-nav .nav {
+        justify-content: center;
+    }
+    .header-nav .nav-link {
+        margin: 0 10px;
+    }
+ }
+
+@media screen and (min-width: 993px) and (max-width: 1399px) {
+   
+}
+
+@media screen and (max-width: 1400px) { 
+   .filter-box.border-main.padding-bx.mb-4 {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+}
+@media only screen and (max-width: 1200px) {
+   .welcome-box.wm-respponsive {
+        flex-direction: column;
+    }
+    .welcome-box.wm-respponsive .welcome-left {
+        width: 100%;
+        text-align: center;
+    }
+    .welcome-box.wm-respponsive .welcome-right {
+        width: 100%;
+        margin-top: 30px;
+        text-align: center;
+        justify-content: center;
+    }
+    
+}
+
+@media (max-width: 991px) {
+    .brand-wrap {
+        padding-left: 0;
+        margin-left: 0;
+        background-position: center;
+        background-size: cover;
+    }
+    .brand-box {
+        padding: 50px;
+        margin: 0 auto;
+    }
+    .login-card {
+        left: 0;
+        margin: 0 auto;
+    }
+
+    .search-filter {
+        min-width: auto;
+    }
+}
+@media only screen and (max-width: 768px) {
+    
+
+}
+            
+
+/* For tablets */
+    
+
+/* For mobiles */
+@media (max-width: 576px) {
+   
+}
+
+@media (max-width: 500px) {
+
+   
+}
+
+
+
+    
