@@ -419,10 +419,33 @@ $(document).ready(function() {
         existingImages.push($(this).val());
     });
 
-    $('#browseFilesBtn, #imageUploadArea').on('click', function(e) {
-        if ($(e.target).closest('#browseFilesBtn').length || $(e.target).closest('#imageUploadArea').length) {
-            $('#images').click();
+    // Handle browse button click
+    $('#browseFilesBtn').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const fileInput = document.getElementById('images');
+        if (fileInput) {
+            fileInput.click();
         }
+    });
+
+    // Handle upload area click (but not if clicking the button or file input)
+    $('#imageUploadArea').on('click', function(e) {
+        // Don't trigger if clicking the button or file input
+        if ($(e.target).closest('#browseFilesBtn').length || $(e.target).is('#images')) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        const fileInput = document.getElementById('images');
+        if (fileInput) {
+            fileInput.click();
+        }
+    });
+
+    // Prevent file input from triggering the upload area click
+    $('#images').on('click', function(e) {
+        e.stopPropagation();
     });
 
     $('#images').on('change', function(e) {
@@ -446,13 +469,17 @@ $(document).ready(function() {
     });
 
     function handleFiles(files) {
+        if (!files || files.length === 0) return;
+        
         Array.from(files).forEach(file => {
-            if (file.type.startsWith('image/') && (imageFiles.length + existingImages.length) < maxImages) {
+            if (file.type && file.type.startsWith('image/') && (imageFiles.length + existingImages.length) < maxImages) {
                 imageFiles.push(file);
                 displayImagePreview(file, imageFiles.length - 1);
             }
         });
-        updateFileInput();
+        
+        // Reset the file input to allow selecting the same file again if needed
+        $('#images').val('');
     }
 
     function displayImagePreview(file, index) {
@@ -479,7 +506,9 @@ $(document).ready(function() {
         reader.readAsDataURL(file);
     }
 
-    $(document).on('click', '.remove-image', function() {
+    $(document).on('click', '.remove-image', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         const imagePath = $(this).data('image-path');
         const index = $(this).data('index');
         
@@ -495,7 +524,7 @@ $(document).ready(function() {
                 name: 'delete_images[]',
                 value: imagePath
             }).appendTo('#vehicleForm');
-        } else if (index !== undefined) {
+        } else if (index !== undefined && imageFiles[index]) {
             // Remove new image
             imageFiles.splice(index, 1);
             $(this).closest('.image-preview-item').removeClass('empty').html('').addClass('empty');
@@ -505,9 +534,27 @@ $(document).ready(function() {
     });
 
     function updateFileInput() {
-        const dt = new DataTransfer();
-        imageFiles.forEach(file => dt.items.add(file));
-        $('#images')[0].files = dt.files;
+        // Note: We can't directly manipulate file input files in all browsers
+        // The files will be submitted with the form when imageFiles are selected
+        // This function is kept for potential future use but may not work in all browsers
+        try {
+            if (imageFiles.length > 0 && typeof DataTransfer !== 'undefined') {
+                const dt = new DataTransfer();
+                imageFiles.forEach(file => {
+                    try {
+                        dt.items.add(file);
+                    } catch(e) {
+                        console.warn('Could not add file to DataTransfer:', e);
+                    }
+                });
+                const fileInput = document.getElementById('images');
+                if (fileInput && dt.files) {
+                    fileInput.files = dt.files;
+                }
+            }
+        } catch(e) {
+            console.warn('File input update not supported:', e);
+        }
     }
 
     function updatePreviewIndexes() {
